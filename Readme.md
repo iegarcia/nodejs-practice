@@ -1,41 +1,56 @@
 # Clean architecture
 
+Practica de NodeJS utilizando clean arquitecture
+
 ## Capa Servidor:
 
-- Importar express, rutas  
-  <code> require(express, rutas)</code>
+- Importar express, rutas
+- Crear clase App con un constructor
+- Dentro del constructor crear el servidor
+- Colocar middleware para que utilice las rutas y convierta a JSON las respuestas
+- Asignar servidor a la clase App
+- Comenzar a escuchar
+  <pre>
+  require(express)
+  require(rutas)
 
-- Crear clase App con un constructor  
-  <code>
+  class App {
+  constructor() {
+    const app = express();
+    app.use(express.json());
+    app.use("/ruta", rutas());
+    this.app = app;
+  }
 
-      class App {
-      constructor() {
-        // Data inicial aca...
-        }
-      }
-
-  </code>
-
-- Dentro del constructor crear el servidor  
-  <code> express() </code>
-- Colocar middlewares para que utilice las rutas y convierta a JSON las respuestas  
-  <code> app.use() </code>
-- Asignar servidor a la clase App  
-  <code> this.app = app </code>
-- Comenzar a escuchar  
-  <code>app.listen(port) </code>
+  start(port) {
+    if (!port) {
+      port = 0;
+    }
+    this.app.listen(port, console.log(`Listening to ${port}`));
+     }
+}
+</pre>
 
 ---
 
 ## Capa Ruteo
 
 - Importar express, API
-
 - Crear una función que traiga todas las rutas y colocar las rutas adentro
-
 - Instanciar enrutador de express
-
 - Instanciar almacenaje (API)
+
+<pre>
+function getRutas() {
+  const router = express.Router();
+  const api = new Api();
+
+  router.get("/ruta", async (req, res) => {
+    //codigo...
+  });
+
+  return router;
+</pre>
 
 ---
 
@@ -62,3 +77,14 @@ Vendría a representar una capa intermedia donde se manipulan o se almacenan los
 ---
 
 ## El orden de los pasos es indistinto, una vez hecho todo esto crear un archivo que servirá de base para correr el servidor y probarlo.
+
+<pre>
+const Servidor = require("./server/app");
+
+const app = new Servidor();
+
+const PORT = 3000;
+
+app.start(PORT);
+
+</pre>
